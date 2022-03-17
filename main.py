@@ -1,5 +1,6 @@
 from day_class import Day
 import csv
+import os
 
 
 def make_list_of_days():
@@ -25,8 +26,8 @@ def make_list_of_days():
     all_days = []
 
     #  initialize a class object for every day in the year, stored in the list all_days
-    for month, days_in_month in calendar_year:
-        for day in range(1, days_in_month + 1):
+    for month in calendar_year:
+        for day in range(1, calendar_year[month] + 1):
             all_days.append(Day(month, day))
 
     return all_days
@@ -70,6 +71,34 @@ def change_week_day(current_day):
         raise ValueError('No valid day was entered')
 
 
+#  https://thispointer.com/python-three-ways-to-check-if-a-file-is-empty/
+def file_is_empty(file_path):
+    """ Check if file is empty by confirming if its size is 0 bytes"""
+
+    # Check if file exist and it is empty
+    return os.path.exists(file_path) and os.stat(file_path).st_size == 0
+
+
+def write_files():
+    """Writes a csv file for each month, rather than one large sheet for every day"""
+
+    for day in days_of_the_year:
+        file_month = day.month() + '.csv'
+
+        first_row = ['Month', 'Day', 'Sunday %', 'Monday %', 'Tuesday %', 'Wednesday %', 'Thursday %',
+                     'Friday %', 'Saturday %']
+        row = [day.month(), day.day(), day.percent_sunday(), day.percent_monday(), day.percent_tuesday(),
+               day.percent_wednesday(), day.percent_thursday(), day.percent_friday(), day.percent_saturday()]
+
+        with open(file_month, 'a') as csv_file:
+            csv_writer = csv.writer(csv_file)
+
+            if file_is_empty(file_month):
+                csv_writer.writerow(first_row)
+
+            csv_writer.writerow(row)
+
+
 def main():
     """Starting from 1800, finds the distribution of weekdays for every calendar day until Dec 31, 2021"""
 
@@ -79,16 +108,19 @@ def main():
 
     while current_year != 2022:
         for day in days_of_the_year:
-            if day.day() == 'February-29' and is_leap_year(current_year):  # special case
+            if day.day_marker() == 'February-29' and is_leap_year(current_year):  # special case
                 day.add_instance(current_week_day)
+                current_week_day = change_week_day(current_week_day)
                 continue
-            elif day.day() == 'February-29':  # skip Feb 29 if not a leap year
+            elif day.day_marker() == 'February-29':  # skip Feb 29 if not a leap year
                 continue
 
             day.add_instance(current_week_day)
             current_week_day = change_week_day(current_week_day)
 
         current_year += 1
+
+    write_files()
 
 
 #  global variable to avoid unnecessary argument passing

@@ -50,26 +50,36 @@ class Day:
 
         self._total += 1
 
-    def day(self):
+    def day_marker(self):
         return f'{self._month}-{self._day}'
 
+    #  returns percentages for distribution use
+
     def percent_sunday(self):
-        return float(f'{self._sunday / self._total:.2f}')
+        return (self._sunday / self._total) * 100
 
     def percent_monday(self):
-        return float(f'{self._monday / self._total:.2f}')
+        return (self._monday / self._total) * 100
 
     def percent_tuesday(self):
-        return float(f'{self._tuesday / self._total:.2f}')
+        return (self._tuesday / self._total) * 100
 
     def percent_wednesday(self):
-        return float(f'{self._wednesday / self._total:.2f}')
+        return (self._wednesday / self._total) * 100
 
     def percent_thursday(self):
-        return float(f'{self._thursday / self._total:.2f}')
+        return (self._thursday / self._total) * 100
 
     def percent_friday(self):
-        return float(f'{self._friday / self._total:.2f}')
+        return (self._friday / self._total) * 100
 
     def percent_saturday(self):
-        return float(f'{self._saturday / self._total:.2f}')
+        return (self._saturday / self._total) * 100
+
+    #  return the month and day of each object for sorting
+
+    def month(self):
+        return self._month
+
+    def day(self):
+        return self._day
