@@ -51,7 +51,7 @@ def is_leap_year(year):
 
 
 def change_week_day(current_day):
-    """Changes current_day to the next day n the 7-day cycle"""
+    """Changes current_day to the next day in the 7-day cycle"""
 
     if current_day == 'Sunday':
         return 'Monday'
